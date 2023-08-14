@@ -1,15 +1,16 @@
 package com.eshopapp.infrastructure.controller;
 
 import com.eshopapp.application.services.ProductService;
-import com.eshopapp.domain.Product;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import com.eshopapp.infrastructure.entity.ProductEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/api/products")
-@Slf4j
+import java.util.List;
+
+@RestController
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -18,25 +19,37 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/show")
-    public String showProduct(Model model){
-        Iterable<Product> products = productService.getProducts();
-        model.addAttribute("products", products);
-        return "api/products/show";
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductEntity>> getAll() {
+        return ResponseEntity.ok(this.productService.getAll());
     }
 
-    @GetMapping("/edit/{id}")
-    public String editProduct(@PathVariable Integer id, Model model){
-        Product product = productService.getProductById(id);
-        log.info("Product obtenido: {}", product);
-        model.addAttribute("product",product);
-        return "api/products/edit";
+/*    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable("id") int productId) {
+        return productService.getProduct(productId)
+                .map(product -> new ResponseEntity<>(product, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Integer id){
-        productService.deleteProductById(id);
-        return "redirect:/api/products/show";
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Product>> getByCategory(@PathVariable("categoryId") int categoryId) {
+        return productService.getByCategory(categoryId)
+                .map(products -> new ResponseEntity<>(products, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PostMapping("/save")
+    public ResponseEntity<Product> save(@RequestBody Product product) {
+        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity delete(@PathVariable("id") int productId) {
+        if (productService.delete(productId)) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }*/
 
 }

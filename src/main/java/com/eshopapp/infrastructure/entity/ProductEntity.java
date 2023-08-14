@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,15 +14,24 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String code;
-    private String name;
-    private String description;
-    private String brand;
-    private String category;
-    private Character gender;
-    private BigDecimal price;
+    @Column(name = "product_id")
+    private Integer productId;
 
+    private String name;
+
+    @Column(name = "category_id")
+    private Integer categoryId;
+
+    private Double price;
+    private String brand;
+    private Character gender;
+    private boolean active;
+
+    @Column(name = "date_created")
     private LocalDateTime dateCreated;
+
+    @Column(name = "date_updated")
     private LocalDateTime dateUpdated;
+
+
 }

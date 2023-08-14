@@ -1,32 +1,43 @@
 package com.eshopapp.application.services;
 
 import com.eshopapp.application.repository.ProductRepository;
-import com.eshopapp.domain.Product;
-import org.springframework.web.multipart.MultipartFile;
+import com.eshopapp.infrastructure.entity.ProductEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
-
+@Service
 public class ProductService {
 
     private final ProductRepository productRepository;
 
+    @Autowired
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public Iterable<Product> getProducts(){
-        return  productRepository.getProducts();
+     public List<ProductEntity> getAll() {
+        return this.productRepository.findAll();
     }
 
-    public Product getProductById(Integer id){
-        return  productRepository.getProductById(id);
+/*    public Optional<Product> getProduct(int productId) {
+        return productRepository.getProduct(productId);
     }
 
-    public void deleteProductById(Integer id){
-        productRepository.deleteProductById(id);
+    public Optional<List<Product>> getByCategory(int categoryId) {
+        return productRepository.getByCategory(categoryId);
     }
+
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
+
+    public boolean delete(int productId) {
+        return getProduct(productId).map(product -> {
+            productRepository.delete(productId);
+            return true;
+        }).orElse(false);
+    }*/
 
 }
