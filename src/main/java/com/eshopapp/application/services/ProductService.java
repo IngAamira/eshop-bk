@@ -21,23 +21,20 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-/*    public Optional<Product> getProduct(int productId) {
-        return productRepository.getProduct(productId);
+    public ProductEntity get(Integer productId) {
+        return this.productRepository.findById(productId).orElse(null);
     }
 
-    public Optional<List<Product>> getByCategory(int categoryId) {
-        return productRepository.getByCategory(categoryId);
+    public ProductEntity save(ProductEntity productEntity) {
+        return this.productRepository.save(productEntity);
     }
 
-    public Product save(Product product) {
-        return productRepository.save(product);
+    public void delete(Integer productId) {
+        this.productRepository.deleteById(productId);
     }
 
-    public boolean delete(int productId) {
-        return getProduct(productId).map(product -> {
-            productRepository.delete(productId);
-            return true;
-        }).orElse(false);
-    }*/
+    public boolean exists(Integer productId) {
+        return this.productRepository.existsById(productId);
+    }
 
 }

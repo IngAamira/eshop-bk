@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "products")
 @Data
@@ -17,21 +15,21 @@ public class ProductEntity {
     @Column(name = "product_id")
     private Integer productId;
 
+    @Column(nullable = false, length = 30, unique = true)
     private String name;
 
-    @Column(name = "category_id")
-    private Integer categoryId;
-
     private Double price;
+
+    @Column(nullable = false, length = 30, unique = true)
     private String brand;
+
     private Character gender;
     private boolean active;
 
-    @Column(name = "date_created")
+/*    @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
     @Column(name = "date_updated")
-    private LocalDateTime dateUpdated;
-
+    private LocalDateTime dateUpdated;*/
 
 }
