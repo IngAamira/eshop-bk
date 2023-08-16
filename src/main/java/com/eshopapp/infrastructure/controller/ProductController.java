@@ -1,56 +1,51 @@
 package com.eshopapp.infrastructure.controller;
 
-import com.eshopapp.application.services.ProductService;
+import com.eshopapp.application.repository.ProductRepository;
+import com.eshopapp.domain.Product;
 import com.eshopapp.infrastructure.entity.ProductEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ProductEntity>> getAll() {
-        return ResponseEntity.ok(this.productService.getAll());
+    public Flux<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductEntity> get(@PathVariable Integer productId) {
-        return ResponseEntity.ok(this.productService.get(productId));
+    public Mono<Product> getProductById(@PathVariable Integer productId) {
+        return productRepository.findById(productId);
     }
 
     @PostMapping
-    public ResponseEntity<ProductEntity> add(@RequestBody ProductEntity productEntity) {
-        if (productEntity.getProductId() == null || !this.productService.exists(productEntity.getProductId())) {
-            return ResponseEntity.ok(this.productService.save(productEntity));
-        }
-        return ResponseEntity.badRequest().build();
+    public Mono<Product> createProduct(@RequestBody ProductEntity productEntity) {
+        return productRepository.save(productEntity);
     }
 
-    @PutMapping
-    public ResponseEntity<ProductEntity> update(@RequestBody ProductEntity productEntity) {
-        if (productEntity.getProductId() != null && this.productService.exists(productEntity.getProductId())) {
-            return ResponseEntity.ok(this.productService.save(productEntity));
-        }
-        return ResponseEntity.badRequest().build();
+    @PutMapping("/{productId}")
+    public Mono<Product> updateProduct(@PathVariable Integer productId, @RequestBody ProductEntity productEntity) {
+        return productRepository.findById(productId)
+                .flatMap(existingProduct -> {
+                    existingProduct.setName(productEntity.getName());
+                    existingProduct.setPrice(productEntity.getPrice());
+                    // Actualizar más propiedades según sea necesario
+                    return productRepository.save(productEntity);
+                });
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer productId) {
-        if (this.productService.exists(productId)) {
-            this.productService.delete(productId);
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.badRequest().build();
+    public Mono<Void> deleteProduct(@PathVariable Integer productId) {
+        return productRepository.deleteById(productId);
     }
 
 }
