@@ -1,8 +1,9 @@
 package com.eshopapp.infrastructure.controller;
 
-import com.eshopapp.application.repository.ProductRepository;
+import com.eshopapp.application.services.ProductServices;
 import com.eshopapp.domain.Product;
 import com.eshopapp.infrastructure.entity.ProductEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -11,41 +12,36 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final ProductServices productServices;
 
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    @Autowired
+    public ProductController(ProductServices productServices) {
+        this.productServices = productServices;
     }
 
     @GetMapping("/all")
     public Flux<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productServices.getAllProducts();
     }
 
     @GetMapping("/{productId}")
     public Mono<Product> getProductById(@PathVariable Integer productId) {
-        return productRepository.findById(productId);
+        return productServices.getProductById(productId);
     }
 
     @PostMapping
     public Mono<Product> createProduct(@RequestBody ProductEntity productEntity) {
-        return productRepository.save(productEntity);
+        return productServices.createProduct(productEntity);
     }
 
     @PutMapping("/{productId}")
     public Mono<Product> updateProduct(@PathVariable Integer productId, @RequestBody ProductEntity productEntity) {
-        return productRepository.findById(productId)
-                .flatMap(existingProduct -> {
-                    existingProduct.setName(productEntity.getName());
-                    existingProduct.setPrice(productEntity.getPrice());
-                    // Actualizar más propiedades según sea necesario
-                    return productRepository.save(productEntity);
-                });
+        return productServices.updateProduct(productId, productEntity);
     }
 
     @DeleteMapping("/{productId}")
     public Mono<Void> deleteProduct(@PathVariable Integer productId) {
-        return productRepository.deleteById(productId);
+        return productServices.deleteProduct(productId);
     }
 
 }

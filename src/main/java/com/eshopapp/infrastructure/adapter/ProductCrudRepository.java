@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductCrudRepository extends ReactiveCrudRepository<ProductEntity, Integer> {
+public interface ProductCrudRepository extends R2dbcRepository<ProductEntity, Integer> {
 
 
 }

@@ -9,11 +9,9 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface ProductRepository {
 
-    Mono<Product> findById(Integer productId);
-    Mono<Product> save(ProductEntity productEntity);
+    Mono<ProductEntity> findById(Integer productId);
+    Mono<ProductEntity> save(ProductEntity productEntity);
     Mono<Void> deleteById(Integer productId);
-    Flux<Product> findAll();
-
-
+    Flux<ProductEntity> findAll();
 
 }

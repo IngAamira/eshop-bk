@@ -22,15 +22,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Mono<Product> findById(Integer productId) {
-        return productCrudRepository.findById(productId)
-                .map(productMapper::toProduct);
+    public Mono<ProductEntity> findById(Integer productId) {
+        return productCrudRepository.findById(productId);
     }
 
     @Override
-    public Mono<Product> save(ProductEntity productEntity) {
-        return productCrudRepository.save(productEntity)
-                .map(productMapper::toProduct);
+    public Mono<ProductEntity> save(ProductEntity productEntity) {
+        return productCrudRepository.save(productEntity);
     }
 
     @Override
@@ -39,9 +37,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Flux<Product> findAll() {
-        return productCrudRepository.findAll()
-                .map(productMapper::toProduct);
+    public Flux<ProductEntity> findAll() {
+        return productCrudRepository.findAll();
     }
-
 }
