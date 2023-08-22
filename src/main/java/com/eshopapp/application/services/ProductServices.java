@@ -55,4 +55,9 @@ public class ProductServices {
         return productMapper.toProduct(productEntity);
     }
 
+    public Flux<Product> getProductsByCategoryId(Integer categoryId) {
+        return productRepository.getProductsByCategoryId(categoryId)
+                .map(productMapper::toProduct);
+    }
+
 }

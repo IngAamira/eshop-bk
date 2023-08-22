@@ -1,7 +1,6 @@
 package com.eshopapp.infrastructure.adapter;
 
 import com.eshopapp.application.repository.ProductRepository;
-import com.eshopapp.domain.Product;
 import com.eshopapp.infrastructure.entity.ProductEntity;
 import com.eshopapp.infrastructure.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +39,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Flux<ProductEntity> findAll() {
         return productCrudRepository.findAll();
     }
+
+    @Override
+    public Flux<ProductEntity> getProductsByCategoryId(Integer categoryId) {
+        return productCrudRepository.findByCategoryId(categoryId);
+    }
+
 }

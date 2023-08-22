@@ -44,4 +44,9 @@ public class ProductController {
         return productServices.deleteProduct(productId);
     }
 
+    @GetMapping("/byCategory/{categoryId}")
+    public Flux<Product> getProductsByCategoryId(@PathVariable Integer categoryId) {
+        return productServices.getProductsByCategoryId(categoryId);
+    }
+
 }

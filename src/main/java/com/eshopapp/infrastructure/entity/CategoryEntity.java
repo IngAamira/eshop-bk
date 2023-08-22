@@ -1,28 +1,22 @@
 package com.eshopapp.infrastructure.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table(name = "products")
-@Builder
+
+@Table(name = "categories")
 @Getter
 @Setter
-public class ProductEntity {
+public class CategoryEntity {
 
     @Id
-    @Column("product_id")
-    private Integer productId;
-
-    private String name;
-    private Double price;
-    private String brand;
-    private Character gender;
-    private boolean active;
-
-
     @Column("category_id")
     private Integer categoryId;
+
+    private String description;
+    private Boolean active;
 
 }

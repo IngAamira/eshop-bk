@@ -9,14 +9,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Builder
-public class Product {
+public class Category {
 
-    private Integer productId;
-    private String name;
-    private Double price;
-    private String brand;
-    private Character gender;
-    private boolean active;
     private Integer categoryId;
-
+    private String description;
+    private Boolean active;
 }
