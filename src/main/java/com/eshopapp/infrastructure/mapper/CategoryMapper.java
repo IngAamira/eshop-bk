@@ -19,7 +19,6 @@ public interface CategoryMapper {
     })
     Category toCategory(CategoryEntity categoryEntity);
 
-    //@Mapping(target = "products", ignore = true) // Ignorar mapeo inverso
     CategoryEntity toCategoryEntity(Category category);
 
 }

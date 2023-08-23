@@ -12,6 +12,5 @@ public interface ProductRepository {
     Mono<ProductEntity> save(ProductEntity productEntity);
     Mono<Void> deleteById(Integer productId);
     Flux<ProductEntity> findAll();
-
     Flux<ProductEntity> getProductsByCategoryId(Integer categoryId);
 }

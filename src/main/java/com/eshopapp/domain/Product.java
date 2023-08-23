@@ -15,7 +15,7 @@ public class Product {
     private String name;
     private Double price;
     private String brand;
-    private Character gender;
+    private Gender gender;
     private boolean active;
     private Integer categoryId;
 
