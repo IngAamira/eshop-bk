@@ -1,7 +1,7 @@
 package com.eshopapp.application.services;
 
-import com.eshopapp.application.repository.ProductRepository;
 import com.eshopapp.domain.Product;
+import com.eshopapp.infrastructure.adapter.ProductReactiveRepository;
 import com.eshopapp.infrastructure.entity.ProductEntity;
 import com.eshopapp.infrastructure.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,43 +12,42 @@ import reactor.core.publisher.Mono;
 @Service
 public class ProductServices {
 
-    private final ProductRepository productRepository;
+    private final ProductReactiveRepository productReactiveRepository;
     private final ProductMapper productMapper;
 
     @Autowired
-    public ProductServices(ProductRepository productRepository, ProductMapper productMapper) {
-        this.productRepository = productRepository;
+    public ProductServices(ProductReactiveRepository productReactiveRepository, ProductMapper productMapper) {
+        this.productReactiveRepository = productReactiveRepository;
         this.productMapper = productMapper;
     }
 
     public Mono<Product> getProductById(Integer productId) {
-        return productRepository.findById(productId)
+        return productReactiveRepository.findById(productId)
                 .map(productMapper::toProduct);
     }
 
     public Flux<Product> getAllProducts() {
-        return productRepository.findAll()
+        return productReactiveRepository.findAll()
                 .map(productMapper::toProduct);
     }
 
     public Mono<Product> createProduct(ProductEntity productEntity) {
-        return productRepository.save(productEntity)
+        return productReactiveRepository.save(productEntity)
                 .map(productMapper::toProduct);
     }
 
     public Mono<Product> updateProduct(Integer productId, ProductEntity productEntity) {
-        return productRepository.findById(productId)
+        return productReactiveRepository.findById(productId)
                 .flatMap(existingProduct -> {
                     existingProduct.setName(productEntity.getName());
                     existingProduct.setPrice(productEntity.getPrice());
-
-                    return productRepository.save(existingProduct)
-                            .map(productMapper::toProduct);
-                });
+                    return productReactiveRepository.save(existingProduct);
+                })
+                .map(productMapper::toProduct);
     }
 
     public Mono<Void> deleteProduct(Integer productId) {
-        return productRepository.deleteById(productId);
+        return productReactiveRepository.deleteById(productId);
     }
 
     private Product mapToDomain(ProductEntity productEntity) {
@@ -56,7 +55,7 @@ public class ProductServices {
     }
 
     public Flux<Product> getProductsByCategoryId(Integer categoryId) {
-        return productRepository.getProductsByCategoryId(categoryId)
+        return productReactiveRepository.findByCategoryId(categoryId)
                 .map(productMapper::toProduct);
     }
 

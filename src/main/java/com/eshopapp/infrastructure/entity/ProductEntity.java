@@ -22,8 +22,7 @@ public class ProductEntity {
     private Gender gender;
     private boolean active;
 
-
     @Column("category_id")
-    private Integer categoryId;
+    private int categoryId;
 
 }

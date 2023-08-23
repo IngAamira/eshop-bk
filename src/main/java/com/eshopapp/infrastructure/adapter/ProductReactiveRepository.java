@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface ProductCrudRepository extends R2dbcRepository<ProductEntity, Integer> {
+public interface ProductReactiveRepository extends R2dbcRepository<ProductEntity, Integer> {
 
     Flux<ProductEntity> findByCategoryId(Integer categoryId);
 
