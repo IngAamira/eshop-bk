@@ -1,56 +1,52 @@
 package com.eshopapp.infrastructure.controller;
 
-import com.eshopapp.application.services.ProductService;
+import com.eshopapp.application.services.ProductServices;
+import com.eshopapp.domain.Product;
 import com.eshopapp.infrastructure.entity.ProductEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductServices productServices;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    @Autowired
+    public ProductController(ProductServices productServices) {
+        this.productServices = productServices;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ProductEntity>> getAll() {
-        return ResponseEntity.ok(this.productService.getAll());
+    public Flux<Product> getAllProducts() {
+        return productServices.getAllProducts();
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductEntity> get(@PathVariable Integer productId) {
-        return ResponseEntity.ok(this.productService.get(productId));
+    public Mono<Product> getProductById(@PathVariable Integer productId) {
+        return productServices.getProductById(productId);
     }
 
     @PostMapping
-    public ResponseEntity<ProductEntity> add(@RequestBody ProductEntity productEntity) {
-        if (productEntity.getProductId() == null || !this.productService.exists(productEntity.getProductId())) {
-            return ResponseEntity.ok(this.productService.save(productEntity));
-        }
-        return ResponseEntity.badRequest().build();
+    public Mono<Product> createProduct(@RequestBody ProductEntity productEntity) {
+        return productServices.createProduct(productEntity);
     }
 
-    @PutMapping
-    public ResponseEntity<ProductEntity> update(@RequestBody ProductEntity productEntity) {
-        if (productEntity.getProductId() != null && this.productService.exists(productEntity.getProductId())) {
-            return ResponseEntity.ok(this.productService.save(productEntity));
-        }
-        return ResponseEntity.badRequest().build();
+    @PutMapping("/{productId}")
+    public Mono<Product> updateProduct(@PathVariable Integer productId, @RequestBody ProductEntity productEntity) {
+        return productServices.updateProduct(productId, productEntity);
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer productId) {
-        if (this.productService.exists(productId)) {
-            this.productService.delete(productId);
-            return ResponseEntity.ok().build();
-        }
+    public Mono<Void> deleteProduct(@PathVariable Integer productId) {
+        return productServices.deleteProduct(productId);
+    }
 
-        return ResponseEntity.badRequest().build();
+    @GetMapping("/byCategory/{categoryId}")
+    public Flux<Product> getProductsByCategoryId(@PathVariable Integer categoryId) {
+        return productServices.getProductsByCategoryId(categoryId);
     }
 
 }
