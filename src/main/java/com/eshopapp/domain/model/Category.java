@@ -1,4 +1,4 @@
-package com.eshopapp.domain;
+package com.eshopapp.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import reactor.core.publisher.Flux;
 
-
+/**
+ * Clase que representa una categoría de productos en la tienda.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,10 +17,24 @@ import reactor.core.publisher.Flux;
 @Builder
 public class Category {
 
+    /**
+     * ID único de la categoría.
+     */
     private Integer categoryId;
+
+    /**
+     * Descripción de la categoría.
+     */
     private String description;
+
+    /**
+     * Indica si la categoría está activa o no.
+     */
     private Boolean active;
 
+    /**
+     * Flujo reactivo de productos asociados a esta categoría.
+     */
     private Flux<Product> products;
 
 }
