@@ -1,25 +1,22 @@
-package com.eshopapp.infrastructure.entity;
+package com.eshopapp.domain.model;
 
-import com.eshopapp.domain.model.Gender;
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
 /**
- * Entidad que representa un producto en la base de datos.
+ * Clase que representa un producto en la tienda.
  */
-@Table(name = "products")
+@Data
+@AllArgsConstructor
+@ToString
 @Builder
-@Getter
-@Setter
-public class ProductEntity {
+public class Product {
 
     /**
      * ID único del producto.
      */
-    @Id
-    @Column("product_id")
     private Integer productId;
 
     /**
@@ -50,7 +47,6 @@ public class ProductEntity {
     /**
      * ID de la categoría a la que pertenece el producto.
      */
-    @Column("category_id")
     private int categoryId;
 
 }
