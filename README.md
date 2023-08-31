@@ -32,11 +32,11 @@ El proyecto sigue una arquitectura hexagonal para una separación clara de las c
 
 - `com.eshopapp.application.repository`: Contiene interfaces para acceder a los datos de productos y categorías.
 - `com.eshopapp.application.services`: Contiene los servicios de la aplicación para manejar la lógica de negocio.
-- `com.eshopapp.domain`: Contiene las clases de dominio como `Product`, `Category` y `Gender`.
+- `com.eshopapp.domain.model`: Contiene las clases de dominio como `Product`, `Category` y `Gender`.
 - `com.eshopapp.infrastructure.adapter`: Contiene adaptadores para interactuar con la capa de infraestructura y bases de datos.
 - `com.eshopapp.infrastructure.entity`: Contiene las entidades JPA que representan productos y categorías en la base de datos.
 - `com.eshopapp.infrastructure.mapper`: Contiene los mappers que convierten entre entidades y objetos de dominio.
-- `com.eshopapp.infrastructure.controller`: Contiene los controladores que manejan las peticiones HTTP y gestionan la API.
+- `com.eshopapp.presentation.controller`: Contiene los controladores que manejan las peticiones HTTP y gestionan la API.
 
 ### Uso de Tecnologías
 

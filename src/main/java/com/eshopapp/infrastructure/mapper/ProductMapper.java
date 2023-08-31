@@ -62,14 +62,5 @@ public interface ProductMapper {
      */
     CategoryEntity toCategoryEntity(Category category);
 
-    /**
-     * Mapea una entidad de producto a su correspondiente objeto de dominio Product.
-     *
-     * @param productEntity La entidad de producto a ser mapeada.
-     * @return Un objeto de dominio de tipo Product mapeado desde la entidad.
-     * @deprecated Este método está en desuso y se reemplaza por toProduct(ProductEntity productEntity).
-     */
-    @Deprecated
-    Product mapEntityToDomain(ProductEntity productEntity);
 
 }

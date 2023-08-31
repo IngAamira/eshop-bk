@@ -1,6 +1,9 @@
 package com.eshopapp.infrastructure.entity;
 
 import com.eshopapp.domain.model.Gender;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -11,8 +14,9 @@ import org.springframework.data.relational.core.mapping.Table;
  */
 @Table(name = "products")
 @Builder
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductEntity {
 
     /**
@@ -25,11 +29,14 @@ public class ProductEntity {
     /**
      * Nombre del producto.
      */
+    @NotBlank(message = "El nombre del producto no puede estar vacío")
     private String name;
 
     /**
      * Precio del producto.
      */
+    @NotNull(message = "El precio del producto no puede estar vacío")
+    @DecimalMin(value = "0.0", message = "El precio debe ser igual o mayor a 0")
     private Double price;
 
     /**
@@ -40,12 +47,14 @@ public class ProductEntity {
     /**
      * Género al que está dirigido el producto.
      */
+    @NotNull(message = "El género del producto no puede estar vacío")
     private Gender gender;
 
     /**
      * Indica si el producto está activo o no.
+     * Valor predeterminado: true
      */
-    private boolean active;
+    private boolean active = true;
 
     /**
      * ID de la categoría a la que pertenece el producto.

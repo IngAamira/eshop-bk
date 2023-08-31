@@ -1,5 +1,7 @@
 package com.eshopapp.application.services;
 
+import com.eshopapp.application.exceptions.InvalidProductDataException;
+import com.eshopapp.application.exceptions.ProductNotFoundException;
 import com.eshopapp.domain.model.Product;
 import com.eshopapp.infrastructure.adapter.ProductReactiveRepository;
 import com.eshopapp.infrastructure.entity.ProductEntity;
@@ -33,6 +35,7 @@ public class ProductServices {
      */
     public Mono<Product> getProductById(Integer productId) {
         return productReactiveRepository.findById(productId)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException(productId)))
                 .map(productMapper::toProduct);
     }
 
@@ -55,6 +58,10 @@ public class ProductServices {
      * @return Un Mono que emite el producto creado.
      */
     public Mono<Product> createProduct(ProductEntity productEntity) {
+        if (productEntity.getName() == null || productEntity.getName().isEmpty()) {
+            //return Mono.error(new InvalidProductDataException("Product name cannot be empty"));
+            throw new InvalidProductDataException("Product name cannot be empty");
+        }
         return productReactiveRepository.save(productEntity)
                 .map(productMapper::toProduct);
     }
@@ -69,6 +76,7 @@ public class ProductServices {
      */
     public Mono<Product> updateProduct(Integer productId, ProductEntity productEntity) {
         return productReactiveRepository.findById(productId)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException(productId)))
                 .flatMap(existingProduct -> {
                     existingProduct.setName(productEntity.getName());
                     existingProduct.setPrice(productEntity.getPrice());
@@ -85,20 +93,9 @@ public class ProductServices {
      * @return Un Mono que se completa una vez que se ha eliminado el producto.
      */
     public Mono<Void> deleteProduct(Integer productId) {
-        return productReactiveRepository.deleteById(productId);
-    }
-
-
-    /**
-     * Mapea una entidad de producto a su correspondiente objeto de dominio.
-     *
-     * @param productEntity La entidad de producto a ser mapeada.
-     * @return Un objeto de dominio de tipo Product mapeado desde la entidad.
-     * @deprecated Este método está en desuso ya que la funcionalidad se ha movido al ProductMapper.
-     */
-    @Deprecated
-    private Product mapToDomain(ProductEntity productEntity) {
-        return productMapper.toProduct(productEntity);
+        return productReactiveRepository.findById(productId)
+                .switchIfEmpty(Mono.error(new ProductNotFoundException(productId)))
+                .flatMap(existingProduct -> productReactiveRepository.deleteById(productId));
     }
 
 

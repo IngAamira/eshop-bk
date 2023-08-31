@@ -3,14 +3,12 @@ package com.eshopapp.domain.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * Clase que representa un producto en la tienda.
  */
 @Data
 @AllArgsConstructor
-@ToString
 @Builder
 public class Product {
 

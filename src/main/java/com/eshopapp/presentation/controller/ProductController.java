@@ -4,9 +4,15 @@ import com.eshopapp.application.services.ProductServices;
 import com.eshopapp.domain.model.Product;
 import com.eshopapp.infrastructure.entity.ProductEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controlador para gestionar las operaciones relacionadas con los productos.
@@ -86,6 +92,24 @@ public class ProductController {
     @GetMapping("/byCategory/{categoryId}")
     public Flux<Product> getProductsByCategoryId(@PathVariable Integer categoryId) {
         return productServices.getProductsByCategoryId(categoryId);
+    }
+
+    /**
+     * Maneja las excepciones de validación arrojadas por Spring durante la validación de entrada.
+     *
+     * @param ex La excepción de tipo MethodArgumentNotValidException arrojada durante la validación.
+     * @return Un mapa que contiene los campos con errores de validación y sus respectivos mensajes de error.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 
 }
