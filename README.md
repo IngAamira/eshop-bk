@@ -59,9 +59,9 @@ El método getAllProducts acepta parámetros de paginación (page y size), orden
 - Markdown: Para la documentación del proyecto.
 
 
-### Documentación de Endpoints:
+## Documentación de Endpoints:
 
-#### Obtener todos los productos (getAllProducts)
+### Obtener todos los productos (getAllProducts)
 
 - **Descripción:** Este endpoint te permite obtener una lista paginada de todos los productos disponibles.
 
@@ -83,7 +83,7 @@ El método getAllProducts acepta parámetros de paginación (page y size), orden
     GET /all?page=0&size=10&filterBy=Laptop
     ```
 
-#### Obtener un producto por ID (getProductById)
+### Obtener un producto por ID (getProductById)
 
 - **Descripción:** Este endpoint te permite obtener un producto por su ID.
 
@@ -107,7 +107,7 @@ El método getAllProducts acepta parámetros de paginación (page y size), orden
     GET /123
     ```
 
-#### Crear un nuevo producto (createProduct)
+### Crear un nuevo producto (createProduct)
 
 - **Descripción:** Este endpoint te permite crear un nuevo producto.
 
@@ -135,7 +135,7 @@ El método getAllProducts acepta parámetros de paginación (page y size), orden
     }
     ```
 
-#### Actualizar un producto existente por ID (updateProduct)
+### Actualizar un producto existente por ID (updateProduct)
 
 - **Descripción:** Este endpoint te permite actualizar un producto existente por su ID.
 
@@ -170,7 +170,7 @@ El método getAllProducts acepta parámetros de paginación (page y size), orden
     }
     ```
 
-#### Eliminar un producto por ID (deleteProduct)
+### Eliminar un producto por ID (deleteProduct)
 
 - **Descripción:** Este endpoint te permite eliminar un producto por su ID.
 
@@ -190,7 +190,7 @@ El método getAllProducts acepta parámetros de paginación (page y size), orden
     DELETE /123
     ```
 
-#### Obtener productos por categoría (getProductsByCategoryId)
+### Obtener productos por categoría (getProductsByCategoryId)
 
 - **Descripción:** Este endpoint te permite obtener una lista de productos por su categoría.
 
