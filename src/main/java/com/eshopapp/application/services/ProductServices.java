@@ -7,6 +7,8 @@ import com.eshopapp.infrastructure.adapter.ProductReactiveRepository;
 import com.eshopapp.infrastructure.entity.ProductEntity;
 import com.eshopapp.infrastructure.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,12 +28,12 @@ public class ProductServices {
         this.productMapper = productMapper;
     }
 
-
     /**
      * Obtiene un producto por su ID.
      *
      * @param productId El ID del producto a buscar.
      * @return Un Mono que emite el producto encontrado, o vacío si no se encuentra.
+     * @throws ProductNotFoundException Si el producto no se encuentra.
      */
     public Mono<Product> getProductById(Integer productId) {
         return productReactiveRepository.findById(productId)
@@ -39,33 +41,34 @@ public class ProductServices {
                 .map(productMapper::toProduct);
     }
 
-
     /**
-     * Obtiene todos los productos disponibles.
+     * Obtiene todos los productos disponibles con paginación y filtrado opcional.
      *
+     * @param page     El número de página.
+     * @param size     El tamaño de página.
+     * @param filterBy Una cadena para filtrar por nombre de producto (opcional).
      * @return Un Flux que emite una secuencia de productos disponibles.
      */
-    public Flux<Product> getAllProducts() {
-        return productReactiveRepository.findAll()
+    public Flux<Product> getAllProducts(int page, int size, String filterBy) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productReactiveRepository.findAllByNameContaining(filterBy, pageable)
                 .map(productMapper::toProduct);
     }
-
 
     /**
      * Crea un nuevo producto.
      *
      * @param productEntity Los detalles del producto a crear.
      * @return Un Mono que emite el producto creado.
+     * @throws InvalidProductDataException Si los datos del producto son inválidos.
      */
     public Mono<Product> createProduct(ProductEntity productEntity) {
         if (productEntity.getName() == null || productEntity.getName().isEmpty()) {
-            //return Mono.error(new InvalidProductDataException("Product name cannot be empty"));
             throw new InvalidProductDataException("Product name cannot be empty");
         }
         return productReactiveRepository.save(productEntity)
                 .map(productMapper::toProduct);
     }
-
 
     /**
      * Actualiza un producto existente por su ID.
@@ -73,6 +76,7 @@ public class ProductServices {
      * @param productId     El ID del producto a actualizar.
      * @param productEntity Los nuevos detalles del producto.
      * @return Un Mono que emite el producto actualizado.
+     * @throws ProductNotFoundException Si el producto no se encuentra.
      */
     public Mono<Product> updateProduct(Integer productId, ProductEntity productEntity) {
         return productReactiveRepository.findById(productId)
@@ -85,19 +89,18 @@ public class ProductServices {
                 .map(productMapper::toProduct);
     }
 
-
     /**
      * Elimina un producto por su ID.
      *
      * @param productId El ID del producto a eliminar.
      * @return Un Mono que se completa una vez que se ha eliminado el producto.
+     * @throws ProductNotFoundException Si el producto no se encuentra.
      */
     public Mono<Void> deleteProduct(Integer productId) {
         return productReactiveRepository.findById(productId)
                 .switchIfEmpty(Mono.error(new ProductNotFoundException(productId)))
                 .flatMap(existingProduct -> productReactiveRepository.deleteById(productId));
     }
-
 
     /**
      * Obtiene productos por su categoría.

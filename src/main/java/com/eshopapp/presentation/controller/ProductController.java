@@ -29,13 +29,20 @@ public class ProductController {
     }
 
     /**
-     * Obtiene todos los productos disponibles.
+     * Obtiene todos los productos disponibles con paginación y filtrado.
      *
+     * @param page     Número de página (comienza en 0).
+     * @param size     Tamaño de la página (cantidad de elementos por página).
+     * @param filterBy Valor de filtro (p. ej., nombre o cualquier otro criterio de filtro).
      * @return Un Flux que emite una secuencia de productos disponibles.
      */
     @GetMapping("/all")
-    public Flux<Product> getAllProducts() {
-        return productServices.getAllProducts();
+    public Flux<Product> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "") String filterBy
+    ) {
+        return productServices.getAllProducts(page, size, filterBy);
     }
 
     /**
