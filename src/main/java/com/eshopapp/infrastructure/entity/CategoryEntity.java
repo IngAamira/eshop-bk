@@ -1,8 +1,8 @@
 package com.eshopapp.infrastructure.entity;
 
 import com.eshopapp.domain.model.Product;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -12,8 +12,7 @@ import reactor.core.publisher.Flux;
  * Entidad que representa una categoría de productos en la base de datos.
  */
 @Table(name = "categories")
-@Getter
-@Setter
+@Data
 public class CategoryEntity {
 
     /**
@@ -26,12 +25,14 @@ public class CategoryEntity {
     /**
      * Descripción de la categoría.
      */
+    @NotBlank(message = "la descripción de la categoría no puede estar vacío")
     private String description;
 
     /**
      * Indica si la categoría está activa o no.
+     * Valor predeterminado: true
      */
-    private Boolean active;
+    private boolean active = true;
 
     /**
      * Flujo reactivo de productos asociados a esta categoría.
