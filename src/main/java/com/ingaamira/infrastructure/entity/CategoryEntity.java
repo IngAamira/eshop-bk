@@ -1,6 +1,6 @@
-package com.eshopapp.infrastructure.entity;
+package com.ingaamira.infrastructure.entity;
 
-import com.eshopapp.domain.model.Product;
+import com.ingaamira.domain.model.Product;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

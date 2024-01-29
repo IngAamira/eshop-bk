@@ -1,4 +1,4 @@
-package com.eshopapp.application.exceptions;
+package com.ingaamira.application.exceptions;
 
 /**
  * Excepción lanzada cuando se intenta acceder a un producto que no se encuentra en el sistema.

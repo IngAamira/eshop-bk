@@ -1,11 +1,11 @@
-package com.eshopapp.application.services;
+package com.ingaamira.application.services;
 
-import com.eshopapp.application.exceptions.InvalidProductDataException;
-import com.eshopapp.application.exceptions.ProductNotFoundException;
-import com.eshopapp.domain.model.Product;
-import com.eshopapp.infrastructure.adapter.ProductReactiveRepository;
-import com.eshopapp.infrastructure.entity.ProductEntity;
-import com.eshopapp.infrastructure.mapper.ProductMapper;
+import com.ingaamira.application.exceptions.InvalidProductDataException;
+import com.ingaamira.application.exceptions.ProductNotFoundException;
+import com.ingaamira.domain.model.Product;
+import com.ingaamira.infrastructure.adapter.ProductReactiveRepository;
+import com.ingaamira.infrastructure.entity.ProductEntity;
+import com.ingaamira.infrastructure.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

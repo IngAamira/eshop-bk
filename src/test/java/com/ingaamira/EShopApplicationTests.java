@@ -1,10 +1,10 @@
-package com.eshopapp;
+package com.ingaamira;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EshopappApplicationTests {
+class EShopApplicationTests {
 
 	@Test
 	void contextLoads() {
