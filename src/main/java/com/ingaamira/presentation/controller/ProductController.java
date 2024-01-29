@@ -1,8 +1,10 @@
-package com.eshopapp.presentation.controller;
+package com.ingaamira.presentation.controller;
 
-import com.eshopapp.application.services.ProductServices;
-import com.eshopapp.domain.model.Product;
-import com.eshopapp.infrastructure.entity.ProductEntity;
+import com.ingaamira.application.exceptions.InvalidProductDataException;
+import com.ingaamira.application.services.ProductServices;
+import com.ingaamira.domain.model.Product;
+import com.ingaamira.infrastructure.entity.ProductEntity;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -52,7 +54,7 @@ public class ProductController {
      * @return Un Mono que emite el producto encontrado, o vacío si no se encuentra.
      */
     @GetMapping("/{productId}")
-    public Mono<Product> getProductById(@PathVariable Integer productId) {
+        public Mono<Product> getProductById(@PathVariable Integer productId) {
         return productServices.getProductById(productId);
     }
 
@@ -63,8 +65,15 @@ public class ProductController {
      * @return Un Mono que emite el producto creado.
      */
     @PostMapping
-    public Mono<Product> createProduct(@RequestBody ProductEntity productEntity) {
-        return productServices.createProduct(productEntity);
+    public Mono<Product> createProduct(@Valid @RequestBody ProductEntity productEntity) {
+        return Mono.just(productEntity)
+                .flatMap(entity -> {
+                    if (entity.getName() == null || entity.getName().isEmpty()) {
+                        return Mono.error(new InvalidProductDataException("Product name cannot be empty"));
+                    }
+                    return productServices.createProduct(entity)
+                            .onErrorResume(error -> Mono.error(new RuntimeException("Error creating product", error)));
+                });
     }
 
     /**

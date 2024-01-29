@@ -1,7 +1,7 @@
-package com.eshopapp.infrastructure.mapper;
+package com.ingaamira.infrastructure.mapper;
 
-import com.eshopapp.domain.model.Category;
-import com.eshopapp.infrastructure.entity.CategoryEntity;
+import com.ingaamira.domain.model.Category;
+import com.ingaamira.infrastructure.entity.CategoryEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

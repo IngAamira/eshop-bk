@@ -1,6 +1,6 @@
-package com.eshopapp.infrastructure.adapter;
+package com.ingaamira.infrastructure.adapter;
 
-import com.eshopapp.infrastructure.entity.ProductEntity;
+import com.ingaamira.infrastructure.entity.ProductEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;

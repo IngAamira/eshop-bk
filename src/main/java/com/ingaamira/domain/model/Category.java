@@ -1,4 +1,4 @@
-package com.eshopapp.domain.model;
+package com.ingaamira.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

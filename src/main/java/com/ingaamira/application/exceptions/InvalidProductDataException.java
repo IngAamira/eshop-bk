@@ -1,4 +1,4 @@
-package com.eshopapp.application.exceptions;
+package com.ingaamira.application.exceptions;
 
 /**
  * Excepción lanzada cuando se detectan datos de producto inválidos.

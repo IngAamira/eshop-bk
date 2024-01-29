@@ -1,239 +1,270 @@
-# Documentación del Proyecto E-ShopApp
+# E-Shop Project Documentation
 
-## Descripción
-E-ShopApp es una aplicación de comercio electrónico desarrollada en Java con el framework Spring Boot. La aplicación permite a los usuarios explorar y comprar productos en línea, organizados en categorías.
+## Description
+This is an e-commerce application developed in Java with the Spring Boot framework with Spring WebFlux. The application allows users to browse and purchase products online, organized into categories.
 
-## Estructura del Proyecto
-El proyecto sigue una arquitectura hexagonal para una separación clara de las capas de aplicación, dominio e infraestructura. Utiliza programación reactiva para manejar operaciones asincrónicas.
+## Project Structure
+The project follows a hexagonal architecture for a clear separation of application, domain, and infrastructure layers. It utilizes reactive programming to handle asynchronous operations.
 
-## Estructura de Carpetas
+## Folder Structure
 
-- src
-    - main
-        - java
-            - com
-                - eshopapp
-                    - application
-                        - repository
-                        - services
-                    - domain
-                        - model
-                    - infrastructure
-                        - adapter
-                        - entity
-                        - mapper
-                    - presentation
-                        - controller
+```bash
+/eshop
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   ├── com.ingaamira
+│   │   │   │   ├── application
+│   │   │   │   │   ├── exceptions
+│   │   │   │   │   ├── repository
+│   │   │   │   │   ├── services
+│   │   │   │   ├── domain
+│   │   │   │   │   ├── model
+│   │   │   │   ├── infrastructure
+│   │   │   │   │   ├── adapter
+│   │   │   │   │   ├── entity
+│   │   │   │   │   ├── mapper
+│   │   │   │   ├── presentation
+│   │   │   │   │   ├── controller
+│   │   ├── resources
+│   │   │   ├── application.properties
+│   ├── test
+├── .gitignore
+├── build.gradle
+├── settings.gradle
+├── README.md
+```
 
+## Key Components
 
-## Componentes Principales
+### Classes and Packages
 
-### Clases y Paquetes
+- `com.ingaamira.application.exceptions`: Contains custom exception classes like `InvalidProductDataException` y `ProductNotFoundException`.
+- `com.ingaamira.application.repository`: Contains interfaces to access product and category data.
+- `com.ingaamira.application.services`: Contains application services to handle business logic.
+- `com.ingaamira.domain.model`: Contains domain classes like `Product`, `Category` y `Gender`.
+- `com.ingaamira.infrastructure.adapter`: Contains adapters to interact with the infrastructure layer and databases.
+- `com.ingaamira.infrastructure.entity`: Contains JPA entities representing products and categories in the database.
+- `com.ingaamira.infrastructure.mapper`: Contains mappers that convert between entities and domain objects.
+- `com.ingaamira.presentation.controller`: Contains controllers that handle HTTP requests and manage the API.
 
-- `com.eshopapp.application.exceptions`: Contiene las clases de excepción personalizadas como `InvalidProductDataException` y `ProductNotFoundException`.
-- `com.eshopapp.application.repository`: Contiene interfaces para acceder a los datos de productos y categorías.
-- `com.eshopapp.application.services`: Contiene los servicios de la aplicación para manejar la lógica de negocio.
-- `com.eshopapp.domain.model`: Contiene las clases de dominio como `Product`, `Category` y `Gender`.
-- `com.eshopapp.infrastructure.adapter`: Contiene adaptadores para interactuar con la capa de infraestructura y bases de datos.
-- `com.eshopapp.infrastructure.entity`: Contiene las entidades JPA que representan productos y categorías en la base de datos.
-- `com.eshopapp.infrastructure.mapper`: Contiene los mappers que convierten entre entidades y objetos de dominio.
-- `com.eshopapp.presentation.controller`: Contiene los controladores que manejan las peticiones HTTP y gestionan la API.
+### Exception Handling
 
-### Manejo de Excepciones
+- `com.ingaamira.application.exceptions.InvalidProductDataException`: Exception thrown when invalid product data is encountered while creating or updating a product.
+- `com.ingaamira.application.exceptions.ProductNotFoundException`: Exception thrown when a product with the specified ID is not found.
 
-- `com.eshopapp.application.exceptions.InvalidProductDataException`: Excepción lanzada cuando se encuentran datos de producto no válidos al crear o actualizar un producto.
-- `com.eshopapp.application.exceptions.ProductNotFoundException`: Excepción lanzada cuando no se encuentra un producto con el ID especificado.
+### Pagination and Filtering Implementation
 
-### Implementación de Paginación y Filtrado
+- Pagination and filtering implementation in list endpoints is done using Spring Data R2DBC.
+- The getAllProducts method accepts pagination (page and size), sorting (sortBy), and filtering (filterBy) parameters. These parameters are used to perform paginated and filtered search for products based on client needs.
 
-La implementación de paginación y filtrado en los endpoints de listado se realiza utilizando Spring Data R2DBC.
-El método getAllProducts acepta parámetros de paginación (page y size), ordenamiento (sortBy) y filtrado (filterBy). Estos parámetros se utilizan para realizar la búsqueda paginada y filtrada de productos en función de las necesidades del cliente.
+### Technology Stack
 
-### Uso de Tecnologías
+- Spring Boot: Framework for building Java applications.
+- Spring Data R2DBC: For accessing reactive databases.
+- MapStruct: For efficient conversion between entities and domain objects.
+- Reactor: Library for reactive programming.
+- Lombok: For generating repetitive code.
+- Markdown: For project documentation.
 
-- Spring Boot: Framework para la construcción de aplicaciones Java.
-- Spring Data R2DBC: Para el acceso a bases de datos reactivas.
-- MapStruct: Para la conversión eficiente entre entidades y objetos de dominio.
-- Reactor: Biblioteca para programación reactiva.
-- Lombok: Para la generación de código repetitivo.
-- Markdown: Para la documentación del proyecto.
+## Endpoint Documentation:
 
+### Get all products (getAllProducts)
 
-## Documentación de Endpoints:
-
-### Obtener todos los productos (getAllProducts)
-
-- **Descripción:** Este endpoint te permite obtener una lista paginada de todos los productos disponibles.
-
-- **Método HTTP:** GET
-
-- **Ruta:** `/all`
-
-- **Parámetros de consulta:**
-    - `page` (Opcional): Número de página, comenzando desde 0. Por defecto, es 0.
-    - `size` (Opcional): Tamaño de la página, que determina la cantidad de productos por página. Por defecto, es 5.
-    - `filterBy` (Opcional): Filtrar los productos por nombre. Por defecto, se aplica ningún filtro.
-
-- **Respuesta Exitosa (200 OK):**
-    - Tipo: Flux de Product
-    - Descripción: Una secuencia de productos disponibles según los parámetros de paginación y filtro.
-
-- **Ejemplo de Solicitud:**
+- **Description:** This endpoint allows you to get a paginated list of all available products.
+- **HTTP Method:** GET
+- **Path:** `/api/products/all`
+- **Successful Response (200 OK):**
+    - Type: Flux of Product
+- **Example Request:**
     ```http
-    GET /all?page=0&size=10&filterBy=Laptop
+    GET /api/products/all
     ```
 
-### Obtener un producto por ID (getProductById)
+### Get a product by ID (getProductById)
 
-- **Descripción:** Este endpoint te permite obtener un producto por su ID.
-
-- **Método HTTP:** GET
-
-- **Ruta:** `/{productId}`
-
-- **Parámetros de ruta:**
-    - `productId` (Requerido): El ID del producto que deseas obtener.
-
-- **Respuesta Exitosa (200 OK):**
-    - Tipo: Mono de Product
-    - Descripción: El producto encontrado con el ID especificado.
-
-- **Respuesta No Encontrada (404 Not Found):**
-    - Tipo: Vacío (Mono&lt;Void&gt;)
-    - Descripción: Si el producto no se encuentra.
-
-- **Ejemplo de Solicitud:**
+- **Description:** This endpoint allows you to get a product by its ID.
+- **HTTP Method:** GET
+- **Path:** `api/products/{productId}`
+- **Path Parameters:**
+    - `productId` (Required): The ID of the product you want to retrieve.
+  - **Successful Response (200 OK):**
+    - Type: Mono of Product
+    - Description: The product found with the specified ID.
+  - **Not Found Response (404 Not Found):**
+    - Type: Empty (Mono<Void>)
+    - Description: If the product is not found.
+- **Example Request:**
     ```http
-    GET /123
+    GET api/products/1
     ```
 
-### Crear un nuevo producto (createProduct)
+### Create a new product (createProduct)
 
-- **Descripción:** Este endpoint te permite crear un nuevo producto.
-
-- **Método HTTP:** POST
-
-- **Ruta:** `/`
-
-- **Cuerpo de la Solicitud:**
-    - Tipo: JSON
-    - Descripción: Los detalles del producto que deseas crear.
-
-- **Respuesta Exitosa (201 Created):**
-    - Tipo: Mono de Product
-    - Descripción: El producto creado.
-
-- **Ejemplo de Solicitud:**
+- **Description:** This endpoint allows you to create a new product.
+- **HTTP Method:** POST
+- **Path:** `api/products`
+- **Request Body:**
+    - Type: JSON
+    - Description: The details of the product you want to create.
+- **Successful Response (201 Created):**
+    - Type: Mono of Product
+    - Description: The created product.
+- **Example Request:**
     ```http
-    POST /
+    POST api/products
     {
-        "name": "Laptop Dell XPS 15",
-        "price": 1399.99,
-        "brand": "Dell",
-        "gender": "MALE",
-        "categoryId": 5
+    "name": "T-Shirt",
+    "price": 45.0,
+    "brand": "Adidas",
+    "gender": "MAN",
+    "active": true,
+    "categoryId": 1
     }
     ```
 
-### Actualizar un producto existente por ID (updateProduct)
+### Update an existing product by ID (updateProduct)
 
-- **Descripción:** Este endpoint te permite actualizar un producto existente por su ID.
-
-- **Método HTTP:** PUT
-
-- **Ruta:** `/{productId}`
-
-- **Parámetros de ruta:**
-    - `productId` (Requerido): El ID del producto que deseas actualizar.
-
-- **Cuerpo de la Solicitud:**
-    - Tipo: JSON
-    - Descripción: Los nuevos detalles del producto.
-
-- **Respuesta Exitosa (200 OK):**
-    - Tipo: Mono de Product
-    - Descripción: El producto actualizado.
-
-- **Respuesta No Encontrada (404 Not Found):**
-    - Tipo: Vacío (Mono&lt;Void&gt;)
-    - Descripción: Si el producto no se encuentra.
-
-- **Ejemplo de Solicitud:**
+- **Description:** This endpoint allows you to update an existing product by its ID.
+- **HTTP Method:** PUT
+- **Path:** `api/products/{productId}`
+- **Path Parameters:**
+    - `productId` (Required): The ID of the product you want to update.
+- **Request Body:**
+    - Type: JSON
+    - Description: The new details of the product.
+- **Successful Response (200 OK):**
+    - Type: Mono of Product
+    - Description: The updated product.
+- **Not Found Response (404 Not Found):**
+    - Type: Mono of Product
+    - Description: The updated product.
+- **Example Request:**
     ```http
-    PUT /123
+    PUT api/products/1
     {
-        "name": "Laptop Dell XPS 15 (Actualizado)",
-        "price": 1499.99,
-        "brand": "Dell",
-        "gender": "MALE",
-        "categoryId": 5
+    "productId": 1,
+    "name": "Leggins",
+    "price": 25.0,
+    "brand": "Adidas",
+    "gender": "MAN",
+    "active": true,
+    "categoryId": 1
     }
     ```
 
-### Eliminar un producto por ID (deleteProduct)
+### Delete a product by ID (deleteProduct)
 
-- **Descripción:** Este endpoint te permite eliminar un producto por su ID.
-
-- **Método HTTP:** DELETE
-
-- **Ruta:** `/{productId}`
-
-- **Parámetros de ruta:**
-    - `productId` (Requerido): El ID del producto que deseas eliminar.
-
-- **Respuesta Exitosa (204 No Content):**
-    - Tipo: Vacío (Mono&lt;Void&gt;)
-    - Descripción: Se completa una vez que se ha eliminado el producto.
-
-- **Ejemplo de Solicitud:**
+- **Description:** This endpoint allows you to delete a product by its ID.
+- **HTTP Method:** DELETE
+- **Path:** `api/products/{productId}`
+- **Path Parameters:**
+    - `productId`  (Required): The ID of the product you want to delete.
+- **Successful Response (200 OK):**
+    - Type: Empty (Mono<Void>)
+    - Description: Completed once the product is deleted.
+- **Example Request:**
     ```http
-    DELETE /123
+    DELETE api/products/1
     ```
 
-### Obtener productos por categoría (getProductsByCategoryId)
+### Get products by category (getProductsByCategoryId)
 
-- **Descripción:** Este endpoint te permite obtener una lista de productos por su categoría.
-
-- **Método HTTP:** GET
-
-- **Ruta:** `/byCategory/{categoryId}`
-
-- **Parámetros de ruta:**
-    - `categoryId` (Requerido): El ID de la categoría de productos que deseas obtener.
-
-- **Respuesta Exitosa (200 OK):**
-    - Tipo: Flux de Product
-    - Descripción: Una secuencia de productos pertenecientes a la categoría especificada.
-
-- **Ejemplo de Solicitud:**
+- **Description:** This endpoint allows you to get a list of products by their category.
+- **HTTP Method:** GET
+- **Path:** `/byCategory/{categoryId}`
+- **Path Parameters:**
+    - `categoryId` (Required): The ID of the product category you want to retrieve.
+- **Successful Response (200 OK):**
+    - Type: Flux of Product
+    - Description: A sequence of products belonging to the specified category.
+- **Example Request:**
     ```http
     GET /byCategory/5
     ```
 
-### Manejar Excepciones de Validación (handleValidationExceptions)
+### Handle Validation Exceptions (handleValidationExceptions)
 
-- **Descripción:** Este es un controlador para manejar excepciones de validación arrojadas por Spring durante la validación de entrada.
+- **Description:** This is a controller to handle validation exceptions thrown by Spring during input validation.
+- **HTTP Method:** Not Applicable.
+- **Not Found Response (404 Not Found):**
+    - Type: Map of fields with errors and error messages
+    - Description: A map containing validation error fields and their respective error messages.
 
-- **Método HTTP:** No aplica
+## Application Configuration
 
-- **Respuesta Exitosa (400 Bad Request):**
-    - Tipo: Mapa de campos con errores y mensajes de error
-    - Descripción: Un mapa que contiene los campos con errores de validación y sus respectivos mensajes de error.
+- Application configuration is found in `application.properties`.
+- Database and other configurations can be adjusted as per environment needs.
 
+## Configuration Database Example
 
-## Configuración Aplicación
+```sql
+CREATE DATABASE eshop_rx_db
+  WITH
+  OWNER = postgres
+  ENCODING = 'UTF8'
+  LC_COLLATE = 'C.UTF-8'
+  LC_CTYPE = 'C.UTF-8'
+  TABLESPACE = pg_default
+  CONNECTION LIMIT = -1
+  IS_TEMPLATE = False;
+```
 
-- La configuración de la aplicación se encuentra en archivos `application.properties` y `application.yml`.
-- La base de datos y otras configuraciones se pueden ajustar según las necesidades del entorno.
+```sql
+CREATE TABLE categories (
+  category_id SERIAL PRIMARY KEY,
+  description VARCHAR(255),
+  active BOOLEAN
+);
 
-## Instalación y Uso
+INSERT INTO categories (description, active) VALUES
+ ('MAN CLOTHES', true),
+ ('WOMEN CLOTHES', true),
+ ('BOY CLOTHES', true),
+ ('GIRL CLOTHES', true),
+ ('BABY CLOTHES', true),
+ ('FOOTWEAR', true),
+ ('ACCESSORIES', true);
+```
 
-1. Clona el repositorio.
-2. Importa el proyecto en tu IDE favorito como proyecto Maven.
-3. Ajusta la configuración de la base de datos y otras propiedades en `application.properties` o `application.yml`.
-4. Ejecuta la aplicación desde tu IDE o mediante `mvn spring-boot:run`.
+```sql
+CREATE TABLE products (
+  product_id SERIAL PRIMARY KEY,
+  name VARCHAR(255),
+  price DECIMAL(10, 2) NOT NULL,
+  brand VARCHAR(255),
+  gender VARCHAR(10),
+  active BOOLEAN,
+  category_id INT,
+  FOREIGN KEY (category_id) REFERENCES categories (category_id)
+);
 
-## Colaboradores
+ALTER TABLE products ALTER COLUMN product_id SET DEFAULT nextval('products_product_id_seq');
 
-- Manuel Cuevas: Líder Técnico
-- Andrés Alfonso Mira Mejía (@IngAamira): Desarrollador de Software
+SELECT setval('products_product_id_seq', (SELECT max(product_id) FROM products) + 1);
+
+INSERT INTO products (name, price, brand, gender, active, category_id) VALUES
+  ('Pants', 35.0, 'Adidas', 'MAN', true, 1),
+  ('Shoes', 50.0, 'Puma', 'MAN', true, 1),
+  ('T-Shirt', 20.0, 'Nike', 'WOMAN', true, 2),
+  ('Dress', 45.0, 'H&M', 'WOMAN', true, 2),
+  ('Blouse', 25.0, 'Zara', 'WOMAN', true, 2),
+  ('Shoes', 22.0, 'Puma', 'MAN', true, 3),
+  ('Pants', 32.0, 'Adidas', 'WOMAN', true, 3),
+  ('Shoes', 22.6, 'Puma', 'WOMAN', true, 4),
+  ('Pants', 32.6, 'Adidas', 'WOMAN', true, 4),
+  ('Shoes', 22.5, 'Puma', 'MAN', true, 5),
+  ('Pants', 32.5, 'Adidas', 'WOMAN', true, 5);
+```
+
+## Installation and Usage
+
+1. Clone the repository.
+2. Import the project into your favorite IDE.
+3. Adjust database configuration and other properties in `application.properties`.
+4. Run the application from your IDE or using `mvn spring-boot:run`.
+
+## Contributors
+
+- Manuel Cuevas: Technical Leader
+- Andrés Alfonso Mira Mejía (@IngAamira): Software Developer

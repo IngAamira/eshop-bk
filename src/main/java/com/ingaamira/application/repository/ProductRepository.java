@@ -1,6 +1,6 @@
-package com.eshopapp.application.repository;
+package com.ingaamira.application.repository;
 
-import com.eshopapp.infrastructure.entity.ProductEntity;
+import com.ingaamira.infrastructure.entity.ProductEntity;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

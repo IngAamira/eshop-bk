@@ -1,4 +1,4 @@
-package com.eshopapp.domain.model;
+package com.ingaamira.domain.model;
 
 /**
  * Enumeración que representa los géneros disponibles para productos en la tienda.
